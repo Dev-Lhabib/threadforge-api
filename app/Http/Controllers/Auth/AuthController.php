@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resoources\UserResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +23,7 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        $token = $user->createToken(threadforge-token)->plainTextToken;
+        $token = $user->createToken('threadforge-token')->plainTextToken;
 
         return response()->json([
             'user' => new UserResource($user),
@@ -43,7 +43,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createtoken('threadforge-token')->plainTexttoken;
+        $token = $user->createToken('threadforge-token')->plainTextToken;
 
         return response()->json([
             'user' => new UserResource($user),
