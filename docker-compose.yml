@@ -1,0 +1,68 @@
+services:
+  app:
+    image: php:8.3-cli
+    container_name: threadforge_app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "8000:8000"
+    environment:
+      - PHP_IDE_CONFIG=serverName=threadforge
+    command: >
+      bash -c "
+      apt-get update &&
+      apt-get install -y --no-install-recommends libzip-dev libonig-dev zip unzip git curl libpng-dev &&
+      docker-php-ext-install pdo_mysql mbstring zip gd bcmath &&
+      php artisan serve --host=0.0.0.0 --port=8000
+      "
+    depends_on:
+      - mysql
+    networks:
+      - threadforge
+
+  mysql:
+    image: mysql:8.0
+    container_name: threadforge_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: threadforge
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - threadforge_mysql_data:/var/lib/mysql
+    networks:
+      - threadforge
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: threadforge_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - threadforge
+
+  redis:
+    image: redis:7-alpine
+    container_name: threadforge_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - threadforge
+
+networks:
+  threadforge:
+    driver: bridge
+
+volumes:
+  threadforge_mysql_data:
