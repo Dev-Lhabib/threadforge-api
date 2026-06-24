@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Blueprint\BlueprintStoreRequest;
 use App\Http\Resources\BlueprintResource;
 use App\Models\Blueprint;
+use Illuminate\Requests\Blueprint\BlueprintUpdateRequest;
 
 class BlueprintController extends Controller
 {
@@ -36,5 +37,23 @@ class BlueprintController extends Controller
         $blueprint->loadCount('posts');
 
         return new BlueprintResource($blueprint);
+    }
+
+    public function update(BlueprintUpdateRequest $request, Blueprint $blueprint)
+    {
+        $this->authorize('view', $blueprint);
+
+        $blueprint->update($request->validated());
+
+        return new BlueprintResource($blueprint);
+    }
+
+    public function destroy(Request $request, Blueprint $blueprint)
+    {
+        $this->authorize('view', $blueprint);
+
+        $blueprint->delete();
+
+        return response()->json(null, 204);
     }
 }

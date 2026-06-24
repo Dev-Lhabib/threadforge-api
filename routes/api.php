@@ -16,4 +16,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/blueprints', [BlueprintController::class, 'index']);
     Route::post('/blueprints', [BlueprintController::class, 'store']);
     Route::get('/blueprints/{blueprint}', [BlueprintController::class, 'show']);
+    Route::patch('/blueprints/{blueprint}', [BlueprintController::class, 'update']);
+    Route::delete('/blueprints/{blueprint}', [BlueprintController::class, 'destroy']);
 });
