@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Blueprint\BlueprintStoreRequest;
 use App\Http\Resources\BlueprintResource;
 use App\Models\Blueprint;
-use Illuminate\Requests\Blueprint\BlueprintUpdateRequest;
+use App\Http\Requests\Blueprint\BlueprintUpdateRequest;
 
 class BlueprintController extends Controller
 {
