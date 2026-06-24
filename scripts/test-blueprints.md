@@ -70,3 +70,37 @@ GET http://localhost:8000/api/blueprints
 ```
 Accept: application/json
 ```
+
+---
+
+## 5. Mise à jour partielle → 200
+
+```
+PATCH http://localhost:8000/api/blueprints/1
+```
+
+**Headers**
+```
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+```
+
+**Body**
+```json
+{"tone": "ironique et technique"}
+```
+
+---
+
+## 6. Suppression → 204
+
+```
+DELETE http://localhost:8000/api/blueprints/1
+```
+
+**Headers**
+```
+Accept: application/json
+Authorization: Bearer {{TOKEN}}
+```
