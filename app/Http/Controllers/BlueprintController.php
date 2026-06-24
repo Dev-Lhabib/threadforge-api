@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\Blueprint\BluePrintStoreRequest;
+use App\Http\Requests\Blueprint\BlueprintStoreRequest;
 use App\Http\Resources\BlueprintResource;
 use App\Models\Blueprint;
 
@@ -35,6 +35,6 @@ class BlueprintController extends Controller
 
         $blueprint->loadCount('posts');
 
-        return new blueprintResource($blueprint);
+        return new BlueprintResource($blueprint);
     }
 }
