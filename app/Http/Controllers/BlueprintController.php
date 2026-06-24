@@ -31,7 +31,7 @@ class BlueprintController extends Controller
 
     public function show(Request $request, Blueprint $blueprint)
     {
-        abort_if($blueprint->user_id !== $request->user()->id, 403, 'Ce blueprint ne vous appartient pas.');
+        $this->authorize('view', $blueprint);
 
         $blueprint->loadCount('posts');
 
