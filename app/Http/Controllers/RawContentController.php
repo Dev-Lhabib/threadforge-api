@@ -47,4 +47,13 @@ class RawContentController extends Controller
             'raw_content' => new RawContentResource($rawContent),
         ], 202);
     }
+
+    public function show(Request $request, RawContent $rawContent)
+    {
+        $this->authorize('view', $rawContent);
+
+        $rawContent->load('posts');
+
+        return new RawContentResource($rawContent);
+    }
 }
