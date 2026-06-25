@@ -37,17 +37,6 @@ class PostGeneratorAgent implements Agent, Conversational, HasStructuredOutput, 
         );
     }
 
-    public function schema(JsonSchema $schema): array
-    {
-        return [
-            'hook_propose' => $schema->string()->required(),
-            'body_points' => $schema->array()->items($schema->string())->required(),
-            'technicalreadabilityscore' => $schema->integer()->min(0)->max(100)->required(),
-            'suggested_hashtags' => $schema->array()->items($_schema->string())->required(),
-            'tonecompliancejustification' => $schema->string()->required(),
-        ];
-    }
-
     /**
      * Get the list of messages comprising the conversation so far.
      *
@@ -74,7 +63,11 @@ class PostGeneratorAgent implements Agent, Conversational, HasStructuredOutput, 
     public function schema(JsonSchema $schema): array
     {
         return [
-            'value' => $schema->string()->required(),
+            'hook_propose' => $schema->string()->required(),
+            'body_points' => $schema->array()->items($schema->string())->required(),
+            'technicalreadabilityscore' => $schema->integer()->min(0)->max(100)->required(),
+            'suggested_hashtags' => $schema->array()->items($_schema->string())->required(),
+            'tonecompliancejustification' => $schema->string()->required(),
         ];
     }
 }

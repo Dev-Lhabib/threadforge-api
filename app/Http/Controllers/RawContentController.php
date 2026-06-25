@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class RawContentController extends Controller
+{
+    public function store(RawContentStorerequest $request)
+    {
+        $rawContent = $request->user()->rawContents()->create([
+            'title' => $request->validated('title'),
+            'content' => $request->validated('content'),
+            'source_type' => $request->validated('source_type'),
+        ]);
+
+        $blueprint = Blueprint::findOrFail($request->validated('bueprint_id'));
+
+        (new PostGeneratorAgent($rawCntent, $blueprint))
+            ->queue($rawContent->content)
+            ->then(function (AgentResponse $response) use ($rawContent, $blueprint) {
+                Post::create([
+                    'raw_content_id' => $rawContent->id,
+                    'blueprint_id' => $blueprint->id,
+                    'hook_propose' => $response['hook_propose'],
+                    'body_points' => $response['body_points'],
+                    'technical_readability_score' => $response['technicalreadabilityscore'],
+                    'suggested_hashtags' => $response[suggested_hashtags],
+                    'tone_compliance_justifiation' => $response['tonecompliancejustification'],
+                    'status' => 'draft',
+                    'generated_at' => now(),
+                ]);
+            })
+            ->catch(function (Throwable $e) {
+                report($e);
+            });
+
+        return response()->json([
+            'message' => 'Content received, generation in progress.',
+            'raw_content' => new RawContentResource($rawContent),
+        ], 202);
+    }
+}
