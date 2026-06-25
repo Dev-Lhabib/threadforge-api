@@ -8,6 +8,7 @@ use App\Http\Requests\RawContent\RawContentStoreRequest;
 use App\Http\Resources\RawContentResource;
 use App\Models\Blueprint;
 use App\Models\Post;
+use App\Models\RawContent;
 use Laravel\Ai\Responses\AgentResponse;
 use Throwable;
 
@@ -56,4 +57,23 @@ class RawContentController extends Controller
 
         return new RawContentResource($rawContent);
     }
+
+    /**
+     * Vérifie que la réponse de l'agent IA contient bien toutes les clés
+     * attendues avant insertion en base (critère "Intégrité du Contrat JSON").
+     */
+    private function assertContractIsValid(AgentResponse $response): void
+    {
+        $requiredKeys = [
+            'hook_propose', 'body_points', 'technicalreadabilityscore',
+            'suggested_hashtags', 'tonecompliancejustification',
+        ];
+
+        foreach ($requiredKeys as $key) {
+            if (! isset($response[$key])){
+                throw new \RuntimeException("AI response missing required key: {$key}");
+            }
+        }
+    }
+
 }
