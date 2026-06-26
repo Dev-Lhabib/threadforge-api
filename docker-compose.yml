@@ -60,9 +60,34 @@ services:
     networks:
       - threadforge
 
+  queue:
+    image: php:8.3-cli
+    container_name: threadforge_queue
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - DB_HOST=mysql  
+    command: >
+      bash -c "
+      apt-get update &&
+      apt-get install -y --no-install-recommends libzip-dev libonig-dev zip unzip git curl libpng-dev &&
+      docker-php-ext-install pdo_mysql mbstring zip gd bcmath &&
+      php artisan queue:work redis --tries=3 --sleep=3
+      "
+    
+    depends_on:
+      - mysql
+      - redis
+    
+    networks:
+      - threadforge
+
 networks:
   threadforge:
     driver: bridge
 
 volumes:
   threadforge_mysql_data:
+
+  
