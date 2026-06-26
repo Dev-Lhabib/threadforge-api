@@ -25,7 +25,7 @@ class GetCampaignRules implements Tool
      */
     public function handle(Request $request): Stringable|string
     {
-        $blueprint = $this->blueprint;
+        $blueprint = $this->post->blueprint;
 
         return sprintf(
             "Tone: %s\nMax hashtags: %d\nMax characters: %d\nAdditional rules: %s",

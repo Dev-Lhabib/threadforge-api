@@ -16,7 +16,7 @@ class ChatController extends Controller
         $agent = new GhostwriterAgent($post);
         $user = $request->user();
 
-        $conversationId = $request->validated('conversation__id');
+        $conversationId = $request->validated('conversation_id');
 
         $response = $conversationId 
             ? $agent->continue($conversationId, as: $user)->prompt($request->validated('message'))

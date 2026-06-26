@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongTo;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RawContent extends Model
@@ -20,11 +20,11 @@ class RawContent extends Model
 
     public function user():BelongTo
     {
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function poste(): HasMany
+    public function posts(): HasMany
     {
-        return $this->hasMany(Poste::class);
+        return $this->hasMany(Post::class);
     }
 }

@@ -8,11 +8,16 @@ use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Messages\Message;
 use Laravel\Ai\Promptable;
+use Laravel\Ai\Concerns\RemembersConversations;
 use App\Models\Post;
 use App\Ai\Tools\GetCampaignRules;
 use App\Ai\Tools\GetPostHistory;
+use Laravel\Ai\Attributes\Provider;
+use Laravel\Ai\Enums\Lab;
 use Stringable;
 
+#[Provider(Lab::Groq)]
+#[Model('llama-3.3-70b-versatile')]
 class GhostwriterAgent implements Agent, Conversational, HasTools
 {
     use Promptable, RemembersConversations;
