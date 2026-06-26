@@ -9,12 +9,13 @@ use App\Http\Resources\RawContentResource;
 use App\Models\Blueprint;
 use App\Models\Post;
 use App\Models\RawContent;
+use App\Http\Controllers\RawContentController;
 use Laravel\Ai\Responses\AgentResponse;
 use Throwable;
 
 class RawContentController extends Controller
 {
-    public function store(RawContentStorerequest $request)
+    public function store(RawContentStoreRequest $request)
     {
         $rawContent = $request->user()->rawContents()->create([
             'title' => $request->validated('title'),
@@ -22,9 +23,9 @@ class RawContentController extends Controller
             'source_type' => $request->validated('source_type'),
         ]);
 
-        $blueprint = Blueprint::findOrFail($request->validated('bueprint_id'));
+        $blueprint = Blueprint::findOrFail($request->validated('blueprint_id'));
 
-        (new PostGeneratorAgent($rawCntent, $blueprint))
+        (new PostGeneratorAgent($rawContent, $blueprint))
             ->queue($rawContent->content)
             ->then(function (AgentResponse $response) use ($rawContent, $blueprint) {
                 Post::create([
@@ -33,7 +34,7 @@ class RawContentController extends Controller
                     'hook_propose' => $response['hook_propose'],
                     'body_points' => $response['body_points'],
                     'technical_readability_score' => $response['technicalreadabilityscore'],
-                    'suggested_hashtags' => $response[suggested_hashtags],
+                    'suggested_hashtags' => $response['suggested_hashtags'],
                     'tone_compliance_justifiation' => $response['tonecompliancejustification'],
                     'status' => 'draft',
                     'generated_at' => now(),
