@@ -15,6 +15,22 @@ use Throwable;
 
 class RawContentController extends Controller
 {
+    /**
+     * Soumission d'un contenu brut pour génération IA asynchrone.
+     *
+     * @group Raw Contents
+     * @authenticated
+     *
+     * @bodyParam title string Optionnel. Example: Mon article sur Docker
+     * @bodyParam content string required Min 20 caractères. Example: Voici mes notes brutes sur Docker Compose...
+     * @bodyParam source_type string required raw ou markdown. Example: raw
+     * @bodyParam blueprint_id integer required Doit exister. Example: 1
+     *
+     * @response 202 {
+     *   "message": "Content received, generation in progress.",
+     *   "raw_content": {"id": 1, "title": "Mon article sur Docker", "content": "...", "source_type": "raw", "created_at": "2026-06-25T10:00:00+00:00"}
+     * }
+     */
     public function store(RawContentStoreRequest $request)
     {
         $rawContent = $request->user()->rawContents()->create([
@@ -50,6 +66,14 @@ class RawContentController extends Controller
         ], 202);
     }
 
+    /**
+     * Détail d'un Raw Content avec ses posts générés.
+     *
+     * @group Raw Contents
+     * @authenticated
+     *
+     * @urlParam rawContent integer required Example: 1
+     */
     public function show(Request $request, RawContent $rawContent)
     {
         $this->authorize('view', $rawContent);

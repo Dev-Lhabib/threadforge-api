@@ -9,6 +9,14 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
+    /**
+     * Liste des posts générés, avec filtre optionnel par statut.
+     *
+     * @group Posts
+     * @authenticated
+     *
+     * @queryParam status string Filtre: draft, posted ou archived. Example: draft
+     */
     public function index(Request $request)
     {
         $posts = Post::query()
@@ -21,6 +29,16 @@ class PostController extends Controller
 
         return PostResource::collection($posts);
     }
+
+    /**
+     * Détail d'un post avec son historique de versions.
+     *
+     * @group Posts
+     * @authenticated
+     *
+     * @urlParam post integer required Example: 1
+     */
+
     public function show(Request $request, Post $post)
     {
         $this->authorize('view', $post);
@@ -30,6 +48,15 @@ class PostController extends Controller
         return new PostResource($post);
     }
 
+    /**
+     * Mise à jour du statut d'un post (cycle de vie éditorial).
+     *
+     * @group Posts
+     * @authenticated
+     *
+     * @urlParam post integer required Example: 1
+     * @bodyParam status string required draft, posted ou archived. Example: posted
+     */
     public function update(PostStatusUpdateRequest $request, Post $post)
     {
         $this->authorize('update', $post);
