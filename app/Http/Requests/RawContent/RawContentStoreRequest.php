@@ -23,10 +23,10 @@ class RawContentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ['nullable', 'string', 'max:255'],
-            'content' => ['required', 'string', 'min:20'],
-            'source_type' => ['required', 'string', 'in:raw, markdown'],
-            'blueprint_id' => ['required', 'integer', 'exists:blueprints, id'],
+            "title" => ['nullable', 'string','max:255'],
+            'content' => ['required', 'string','min:20'],
+            'source_type' => ['required', 'string', 'in:raw,markdown'],
+            'blueprint_id' => ['required', 'integer', 'exists:blueprints,id'],
         ];
     }
 }
