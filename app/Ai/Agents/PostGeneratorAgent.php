@@ -13,7 +13,12 @@ use Laravel\Ai\Promptable;
 use Stringable;
 use App\Models\Blueprint;
 use App\Models\RawContent;
+use Laravel\Ai\Attributes\Provider;
+use Laravel\Ai\Attributes\Model;
+use Laravel\Ai\Enums\Lab;
 
+#[Provider(Lab::Groq)]
+#[Model('llama-3.3-70b-versatile')]
 class PostGeneratorAgent implements Agent, Conversational, HasStructuredOutput, HasTools
 {
     use Promptable;

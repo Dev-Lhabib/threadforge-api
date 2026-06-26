@@ -35,7 +35,7 @@ class RawContentController extends Controller
                     'body_points' => $response['body_points'],
                     'technical_readability_score' => $response['technicalreadabilityscore'],
                     'suggested_hashtags' => $response['suggested_hashtags'],
-                    'tone_compliance_justifiation' => $response['tonecompliancejustification'],
+                    'tone_compliance_justification' => $response['tonecompliancejustification'],
                     'status' => 'draft',
                     'generated_at' => now(),
                 ]);
