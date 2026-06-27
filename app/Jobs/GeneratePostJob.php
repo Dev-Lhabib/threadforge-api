@@ -47,7 +47,7 @@ class GeneratePostJob implements ShouldQueue
             'raw_content_id' => $rawContent->id,
             'blueprint_id' => $blueprint->id,
             'hook_propose' => $response['hook_propose'],
-            'body_points' => $this->normalizeArrayField($respomse['body_points']),
+            'body_points' => $this->normalizeArrayField($response['body_points']),
             'technical_readability_score' => $response['technicalreadabilityscore'],
             'suggested_hashtags' => $this->normalizeArrayField($response['suggested_hashtags']),
             'tone_compliance_justification' => $response['tonecompliancejustification'],
@@ -78,7 +78,7 @@ class GeneratePostJob implements ShouldQueue
         ];
 
         foreach ($requiredKeys as $key) {
-            if (!isset($respose[$key])) {
+            if (!isset($response[$key])) {
                 throw new RuntimeException("AI response missing required key: {$key}");
             }
         }
@@ -86,7 +86,7 @@ class GeneratePostJob implements ShouldQueue
 
     public function failed(Throwable $exception): void 
     {
-        logger()->error('GeneratePotJob failed', [
+        logger()->error('GeneratePostJob failed', [
             'raw_content_id' => $this->rawContentId,
             'error' => $exception->getMessage(),
         ]);
