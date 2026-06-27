@@ -48,6 +48,12 @@ return [
             'exclude' => [
                 // 'GET /health', 'admin.*'
             ],
+
+            'apply' => [
+                'response_calls' => [
+                    'methods' => [],   // au lieu de ['GET']
+                ],
+            ],
         ],
     ],
 
@@ -232,15 +238,9 @@ return [
         'bodyParameters' => [
             ...Defaults::BODY_PARAMETERS_STRATEGIES,
         ],
-        'responses' => configureStrategy(
+        'responses' => removeStrategies(
             Defaults::RESPONSES_STRATEGIES,
-            Strategies\Responses\ResponseCalls::withSettings(
-                only: ['GET *'],
-                // Recommended: disable debug mode in response calls to avoid error stack traces in responses
-                config: [
-                    'app.debug' => false,
-                ]
-            )
+            [Strategies\Responses\ResponseCalls::class]
         ),
         'responseFields' => [
             ...Defaults::RESPONSE_FIELDS_STRATEGIES,

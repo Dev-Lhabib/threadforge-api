@@ -1,0 +1,109 @@
+name: Chat
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: 'api/posts/{post_id}/chat'
+    metadata:
+      custom: []
+      groupName: Chat
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Envoie un message au Ghostwriter Agent pour un post donné.'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      post_id:
+        custom: []
+        name: post_id
+        description: 'The ID of the post.'
+        required: true
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      post:
+        custom: []
+        name: post
+        description: "L'ID du post concerné."
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      post_id: 16
+      post: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      message:
+        custom: []
+        name: message
+        description: ''
+        required: true
+        example: 'Donne-moi 3 variantes plus agressives pour le hook.'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      conversation_id:
+        custom: []
+        name: conversation_id
+        description: 'Optionnel, pour continuer une conversation existante.'
+        required: false
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      save_as_version:
+        custom: []
+        name: save_as_version
+        description: 'Optionnel, sauvegarde la réponse comme nouvelle PostVersion.'
+        required: false
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      message: 'Donne-moi 3 variantes plus agressives pour le hook.'
+      conversation_id: architecto
+      save_as_version: false
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "reply": "Voici 3 variantes plus agressives...",
+            "conversation_id": "abc123",
+            "version_id": null
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
