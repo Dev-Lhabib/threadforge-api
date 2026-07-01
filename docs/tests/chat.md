@@ -1,7 +1,16 @@
 # Chat Agent — Tests
 
+**Variables**
+```bash
+TOKEN="ton_token"
+POST_ID=1
+```
+
+---
+
 ## 1. Zero hallucination — vérifier l'appel réel du Tool
 
+**Postman**
 ```
 POST http://localhost:8000/api/posts/1/chat
 ```
@@ -20,6 +29,14 @@ Authorization: Bearer {{TOKEN}}
 }
 ```
 
+**Curl**
+```bash
+curl -s -X POST http://localhost:8000/api/posts/$POST_ID/chat \
+  -H "Accept: application/json" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"message": "Quelles sont les règles de mon blueprint actuel pour ce post ?"}' | jq
+```
+
 **Vérification** : surveiller `docker compose logs -f app` ou écouter l'event
 `InvokingTool` (Laravel\Ai\Events\InvokingTool) — il doit apparaître avec
 `GetCampaignRules` comme tool invoqué. La réponse textuelle doit correspondre
@@ -31,6 +48,7 @@ exactement aux valeurs réelles du blueprint en base (pas des valeurs inventées
 
 ### Q1 — Traduire le post
 
+**Postman**
 ```
 POST http://localhost:8000/api/posts/1/chat
 ```
@@ -42,10 +60,19 @@ POST http://localhost:8000/api/posts/1/chat
 }
 ```
 
+**Curl**
+```bash
+curl -s -X POST http://localhost:8000/api/posts/$POST_ID/chat \
+  -H "Accept: application/json" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"message": "Traduis ce post en anglais."}' | jq
+```
+
 → Noter le `conversation_id` retourné dans la réponse.
 
 ### Q2 — Référence implicite ("celui-ci")
 
+**Postman**
 ```
 POST http://localhost:8000/api/posts/1/chat
 ```
@@ -58,6 +85,17 @@ POST http://localhost:8000/api/posts/1/chat
 }
 ```
 
+**Curl**
+```bash
+curl -s -X POST http://localhost:8000/api/posts/$POST_ID/chat \
+  -H "Accept: application/json" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "message": "Donne-moi un autre hook pour celui-ci.",
+    "conversation_id": "CONVERSATION_ID_DE_Q1"
+  }' | jq
+```
+
 **Vérification** : la réponse doit porter sur la **version traduite en anglais**
 de Q1, preuve que le contexte est bien rechargé depuis `agent_conversations` /
 `agent_conversation_messages`.
@@ -66,6 +104,7 @@ de Q1, preuve que le contexte est bien rechargé depuis `agent_conversations` /
 
 ## 3. Sauvegarder une réponse comme nouvelle version
 
+**Postman**
 ```
 POST http://localhost:8000/api/posts/1/chat
 ```
@@ -76,6 +115,17 @@ POST http://localhost:8000/api/posts/1/chat
   "message": "Réécris ce post avec un ton plus direct.",
   "save_as_version": true
 }
+```
+
+**Curl**
+```bash
+curl -s -X POST http://localhost:8000/api/posts/$POST_ID/chat \
+  -H "Accept: application/json" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "message": "Réécris ce post avec un ton plus direct.",
+    "save_as_version": true
+  }' | jq
 ```
 
 **Vérification** : `version_id` non-null dans la réponse, et une nouvelle ligne
