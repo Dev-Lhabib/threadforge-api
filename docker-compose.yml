@@ -14,7 +14,7 @@ services:
       apt-get update &&
       apt-get install -y --no-install-recommends libzip-dev libonig-dev zip unzip git curl libpng-dev &&
       docker-php-ext-install pdo_mysql mbstring zip gd bcmath &&
-      pecl install redis && docker-php-ext-enable redis &&
+      (php -m | grep -q redis || (pecl install redis && docker-php-ext-enable redis)) &&
       php artisan serve --host=0.0.0.0 --port=8000
       "
     healthcheck:
@@ -78,7 +78,7 @@ services:
       apt-get update &&
       apt-get install -y --no-install-recommends libzip-dev libonig-dev zip unzip git curl libpng-dev &&
       docker-php-ext-install pdo_mysql mbstring zip gd bcmath &&
-      pecl install redis && docker-php-ext-enable redis &&
+      (php -m | grep -q redis || (pecl install redis && docker-php-ext-enable redis)) &&
       php artisan queue:work redis --tries=3 --sleep=3
       "
     healthcheck:

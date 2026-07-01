@@ -18,7 +18,7 @@ use Laravel\Ai\Attributes\Model;
 use Laravel\Ai\Enums\Lab;
 
 #[Provider(Lab::Groq)]
-#[Model('llama-3.3-70b-versatile')]
+#[Model('meta-llama/llama-4-scout-17b-16e-instruct')]
 class PostGeneratorAgent implements Agent, Conversational, HasStructuredOutput, HasTools
 {
     use Promptable;
@@ -71,7 +71,7 @@ class PostGeneratorAgent implements Agent, Conversational, HasStructuredOutput, 
             'hook_propose' => $schema->string()->required(),
             'body_points' => $schema->array()->items($schema->string())->required(),
             'technicalreadabilityscore' => $schema->integer()->min(0)->max(100)->required(),
-            'suggested_hashtags' => $schema->array()->items($_schema->string())->required(),
+            'suggested_hashtags' => $schema->array()->items($schema->string())->required(),
             'tonecompliancejustification' => $schema->string()->required(),
         ];
     }
